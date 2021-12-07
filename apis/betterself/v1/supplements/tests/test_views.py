@@ -142,11 +142,10 @@ class SupplementV1Tests(SupplementBaseTests, GetRequestsTestsMixin, PostRequests
         ingr_comps_uuids = ingr_comps.values_list('uuid', flat=True)
         ingr_comps_uuids = [{'uuid': str(item)} for item in ingr_comps_uuids]
 
-        request_parameters = {
+        return {
             'name': 'Glutamine',
             'ingredient_compositions': ingr_comps_uuids
         }
-        return request_parameters
 
     def test_default_parameters_recorded_correctly(self):
         request_parameters = self._get_default_post_parameters()
@@ -156,10 +155,13 @@ class SupplementV1Tests(SupplementBaseTests, GetRequestsTestsMixin, PostRequests
         supplement = Supplement.objects.get(name=request_parameters['name'])
 
         ingr_comps_uuids = supplement.ingredient_compositions.values_list('uuid', flat=True)
-        ingr_comps_uuids = set(str(uuid) for uuid in ingr_comps_uuids)
+        ingr_comps_uuids = {str(uuid) for uuid in ingr_comps_uuids}
 
         request_ingredient_compositions = request_parameters['ingredient_compositions']
-        request_ingredient_compositions_uuids = set(item['uuid'] for item in request_ingredient_compositions)
+        request_ingredient_compositions_uuids = {
+            item['uuid'] for item in request_ingredient_compositions
+        }
+
 
         self.assertSetEqual(request_ingredient_compositions_uuids, ingr_comps_uuids)
 
@@ -290,11 +292,10 @@ class SupplementStackV1Tests(SupplementBaseTests, GetRequestsTestsMixin, PostReq
         supplements_uuids = supplements.values_list('uuid', flat=True)
         supplements_uuids = [{'supplement_uuid': str(item)} for item in supplements_uuids]
 
-        request_parameters = {
+        return {
             'name': 'Glutamine',
             'compositions': supplements_uuids
         }
-        return request_parameters
 
     def test_post_request(self):
         request_parameters = self._get_default_post_parameters()
@@ -335,11 +336,10 @@ class UserSupplementStackCompositionViewsetTestsV2(BaseAPIv2Tests, GetRequestsTe
     def _get_post_parameters(user):
         stack = UserSupplementStackFactory(user=user)
         supplement = SupplementFactory(user=user)
-        data = {
+        return {
             'stack_uuid': str(stack.uuid),
             'supplement_uuid': str(supplement.uuid)
         }
-        return data
 
     @classmethod
     def setUpTestData(cls):

@@ -30,10 +30,7 @@ class UserDetailsSerializer(serializers.ModelSerializer):
         fields = ('uuid', 'username', 'password', 'timezone', 'supplements', 'phone_number', 'email', 'token')
 
     def create(self, validated_data):
-        # Override create in this serializer so we can use the function create_user
-        # thus resulting in salted password hashes
-        user = User.objects.create_user(**validated_data)
-        return user
+        return User.objects.create_user(**validated_data)
 
     def validate(self, validated_data):
         cleaned_supplements = self._clean_supplements(validated_data['supplements'])
@@ -48,8 +45,7 @@ class UserDetailsSerializer(serializers.ModelSerializer):
             return
         else:
             phone_number = user_phone_number.phone_number
-            phone_number_serialized = phone_number.as_e164
-            return phone_number_serialized
+            return phone_number.as_e164
 
     @staticmethod
     def get_token(instance):

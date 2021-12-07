@@ -152,7 +152,10 @@ class TestDataframeConcatenation(TestCase, UsersTestsFixturesMixin):
         distinct_supplement_event_dates = {item.date() for item in distinct_supplement_event_times}
 
         distinct_productivity_log_queryset_dates = productivity_log_queryset.values_list('date', flat=True).distinct()
-        distinct_productivity_log_queryset_dates = {item for item in distinct_productivity_log_queryset_dates}
+        distinct_productivity_log_queryset_dates = set(
+            distinct_productivity_log_queryset_dates
+        )
+
 
         distinct_dates = distinct_supplement_event_dates.union(distinct_productivity_log_queryset_dates)
         distinct_dates_count = len(distinct_dates)

@@ -11,11 +11,10 @@ fixture_filename = 'initial_data.json'
 def load_fixture(apps, schema_editor):
     fixture_file = os.path.join(fixture_dir, fixture_filename)
 
-    fixture = open(fixture_file, 'rb')
-    objects = serializers.deserialize('json', fixture, ignorenonexistent=True)
-    for obj in objects:
-        obj.save()
-    fixture.close()
+    with open(fixture_file, 'rb') as fixture:
+        objects = serializers.deserialize('json', fixture, ignorenonexistent=True)
+        for obj in objects:
+            obj.save()
 
 def unload_fixture(apps, schema_editor):
     'Brutally deleting all entries for this model...'

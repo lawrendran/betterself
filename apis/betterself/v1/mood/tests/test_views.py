@@ -26,7 +26,7 @@ class TestUserMoodLogViews(BaseAPIv1Tests, GetRequestsTestsMixin, PostRequestsTe
         super().setUpTestData()
 
         now = get_current_utc_time_and_tz()
-        for subtract_seconds in range(0, cls.FIXTURES_SIZE):
+        for subtract_seconds in range(cls.FIXTURES_SIZE):
             time = now - relativedelta(seconds=subtract_seconds)
             UserMoodLogFactory(time=time, user=cls.user_1)
 

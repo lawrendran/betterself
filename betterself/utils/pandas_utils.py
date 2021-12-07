@@ -5,10 +5,11 @@ from betterself.utils.date_utils import get_current_userdate
 
 def get_complete_date_range_series_container(user, start_date, end_date):
     localized_index = pd.to_datetime([start_date, end_date])
-    # create a series includes the parameter's start and end dates
-    # do this to allow API requests for charts to be certain they are dealing with the same X axis
-    series = pd.Series(index=localized_index).asfreq('D').tz_localize(user.pytz_timezone)
-    return series
+    return (
+        pd.Series(index=localized_index)
+        .asfreq('D')
+        .tz_localize(user.pytz_timezone)
+    )
 
 
 def force_start_end_date_to_series(user, series, start_date, end_date):
@@ -53,8 +54,9 @@ def get_empty_timezone_aware_series_containing_index_of_today(user):
     # but an empty series doesn't contain a timezone - so create a series with a index of today and timezone
     # of the user preference, otherwise, dataframes won't work
     user_now = get_current_userdate(user)
-    index = pd.DatetimeIndex(tz=user.pytz_timezone, freq='D', end=user_now, periods=1)
-    return index
+    return pd.DatetimeIndex(
+        tz=user.pytz_timezone, freq='D', end=user_now, periods=1
+    )
 
 
 def update_dataframe_to_be_none_instead_of_nan_for_api_responses(df):

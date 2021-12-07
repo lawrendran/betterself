@@ -19,11 +19,7 @@ class GetRequestsTestsMixin(GenericRESTMethodMixin):
         request = self.client_1.get(url, request_parameters)
 
         # pagination views puts data in "results"
-        if self.PAGINATION:
-            request_data = request.data['results']
-        else:
-            request_data = request.data
-
+        request_data = request.data['results'] if self.PAGINATION else request.data
         for record in request_data:
             # if we are using a get with request parameters, we want to be certain
             # that it's correctly filtering on those request_parameters correctly
@@ -35,9 +31,8 @@ class GetRequestsTestsMixin(GenericRESTMethodMixin):
             # a bit of a hack, but string responses of datetimes can change slightly
             # based on how zero utc is represented, here bring the object back to datetime
             # and then isoformat it out again
-            for key in record_values:
-                if 'time' == key[-4:]:
-                    returned_time_string = record_values[key]
+            for key, returned_time_string in record_values.items():
+                if key[-4:] == 'time':
                     serialized_time_string = dateutil.parser.parse(returned_time_string).isoformat()
 
                     record_values[key] = serialized_time_string
@@ -55,11 +50,7 @@ class GetRequestsTestsMixin(GenericRESTMethodMixin):
         request = self.client_1.get(url)
 
         # pagination views puts data in "results
-        if self.PAGINATION:
-            request_data = request.data['results']
-        else:
-            request_data = request.data
-
+        request_data = request.data['results'] if self.PAGINATION else request.data
         contains_ids = [item['uuid'] for item in request_data]
         key_check_items = [item[key_check] for item in request_data]
 
@@ -73,11 +64,7 @@ class GetRequestsTestsMixin(GenericRESTMethodMixin):
         request = self.client_1.get(url)
 
         # pagination views puts data in "results"
-        if self.PAGINATION:
-            request_data = request.data['results']
-        else:
-            request_data = request.data
-
+        request_data = request.data['results'] if self.PAGINATION else request.data
         # this assumes that the fixtures data will create more than 1 record!
         self.assertTrue(len(request_data) > 1)
 

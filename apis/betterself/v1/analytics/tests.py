@@ -74,7 +74,7 @@ class SupplementAnalyticsSummaryTests(BaseSupplementAnalyticsTests, BaseSuppleme
             'most_taken_dates',
             'creation_date'}
 
-        response_keys = set([item[UNIQUE_KEY_CONSTANT] for item in response.data])
+        response_keys = {item[UNIQUE_KEY_CONSTANT] for item in response.data}
         self.assertEqual(expected_keys, response_keys)
 
         first_event = SupplementLog.objects.filter(supplement=self.supplement).order_by('time').first()

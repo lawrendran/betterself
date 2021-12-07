@@ -15,16 +15,14 @@ logger = logging.getLogger(__name__)
 def get_start_time_interval_from_beat_time(beat_time):
     start_hour = beat_time.hour
     start_minute = (beat_time.minute // 5) * 5
-    start_time = datetime.time(hour=start_hour, minute=start_minute)
-    return start_time
+    return datetime.time(hour=start_hour, minute=start_minute)
 
 
 def get_end_time_interval_from_beat_time(beat_time):
     end_datetime = beat_time + datetime.timedelta(minutes=5)
     end_hour = end_datetime.hour
     end_minute = (end_datetime.minute // 5) * 5
-    end_time = datetime.time(hour=end_hour, minute=end_minute)
-    return end_time
+    return datetime.time(hour=end_hour, minute=end_minute)
 
 
 @celery_app.task

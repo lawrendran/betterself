@@ -48,15 +48,10 @@ class TestSupplementStackSerializer(TestCase):
 
         self.assertTrue(compositions_count > 1)
 
-        one_composition = stack_compositions[0:1]
+        one_composition = stack_compositions[:1]
 
-        data = {}
-        data['name'] = stack.name
-        data['compositions'] = one_composition
-
-        context = {}
-        context['user'] = stack.user
-
+        data = {'name': stack.name, 'compositions': one_composition}
+        context = {'user': stack.user}
         serializer = UserSupplementStackCreateUpdateSerializer(instance=stack, data=data, context=context)
         serializer.is_valid()
         serializer.save()

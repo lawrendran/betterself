@@ -18,9 +18,7 @@ SECONDARY_DEFAULT_CREDENTIALS = {
 class UsersTestsFixturesMixin(object):
     @classmethod
     def create_user(cls, credentials=DEFAULT_CREDENTIALS):
-        # pass username, email and password
-        user = User.objects.create_user(**credentials)
-        return user
+        return User.objects.create_user(**credentials)
 
     @classmethod
     def create_authenticated_user_on_client(cls, client, user):

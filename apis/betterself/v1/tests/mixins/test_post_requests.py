@@ -4,7 +4,7 @@ from apis.betterself.v1.urls import API_V1_LIST_CREATE_URL
 
 class PostRequestsTestsMixin(GenericRESTMethodMixin):
     def test_post_request(self, parameters=None):
-        post_parameters = parameters if parameters else self.DEFAULT_POST_PARAMS
+        post_parameters = parameters or self.DEFAULT_POST_PARAMS
 
         # multiple users should be able to create the same object
         request = self._make_post_request(self.client_1, post_parameters)
@@ -30,7 +30,7 @@ class PostRequestsTestsMixin(GenericRESTMethodMixin):
         and see how many return back
         """
         # hard to dynamically set default post parameters for objects with heavy relationships
-        post_parameters = parameters if parameters else self.DEFAULT_POST_PARAMS
+        post_parameters = parameters or self.DEFAULT_POST_PARAMS
 
         request = self._make_get_request(self.client_1)
 
@@ -55,7 +55,7 @@ class PostRequestsTestsMixin(GenericRESTMethodMixin):
         self.assertEqual(data_items_count + 1, updated_data_items_count, second_request.data)
 
     def test_post_request_changes_objects_for_right_user(self, parameters=None):
-        post_parameters = parameters if parameters else self.DEFAULT_POST_PARAMS
+        post_parameters = parameters or self.DEFAULT_POST_PARAMS
 
         client_1_starting_get_request = self._make_get_request(self.client_1)
         client_2_starting_get_request = self._make_get_request(self.client_2)

@@ -75,8 +75,7 @@ class RescueTimeHistoricalDailyImporter(object):
             'restrict_kind': 'efficiency',
         }
 
-        response = requests.get(RT_API_URL, data=parameters)
-        return response
+        return requests.get(RT_API_URL, data=parameters)
 
     @staticmethod
     def get_efficiency_timeseries_from_response(response):

@@ -77,13 +77,11 @@ def get_setting(name, use_defaults=True):
     """
     if hasattr(settings, name):
         return _verified_setting(name)
-    if use_defaults:
-        if hasattr(defaults, name):
-            return getattr(defaults, name)
+    if use_defaults and hasattr(defaults, name):
+        return getattr(defaults, name)
     msg = '{0} must be specified in your settings'.format(name)
     raise ImproperlyConfigured(msg)
 
 
 def _verified_setting(name):
-    result = getattr(settings, name)
-    return result
+    return getattr(settings, name)

@@ -13,20 +13,18 @@ VALID_QUANTITIES = range(1, 30)
 STATIC_DATE = datetime.datetime(2016, 12, 31)
 eastern_tz = timezone('US/Eastern')
 STATIC_DATE = eastern_tz.localize(STATIC_DATE)
-GENERATED_DATES = [STATIC_DATE + datetime.timedelta(days=x) for x in range(0, 30)]
+GENERATED_DATES = [STATIC_DATE + datetime.timedelta(days=x) for x in range(30)]
 
 
 def generate_test_cases_for_events():
     """
     Generate an array of all the test cases by multiplying all the possibilities by themselves
     """
-    test_cases = itertools.product(VALID_QUANTITIES, INPUT_SOURCES)
-    return test_cases
+    return itertools.product(VALID_QUANTITIES, INPUT_SOURCES)
 
 
 def generate_unique_index_per_supplements_and_time(supplements_used):
-    unique_index = itertools.product(supplements_used, GENERATED_DATES)
-    return unique_index
+    return itertools.product(supplements_used, GENERATED_DATES)
 
 
 class SupplementEventsFixturesGenerator(object):

@@ -69,12 +69,10 @@ def calculate_rescue_time_pulse_from_dataframe(dataframe):
     productive_time = dataframe.get(RT_PRODUCTIVE_TIME_LABEL, 0)
     very_productive_time = dataframe.get(RT_VERY_PRODUCTIVE_TIME_LABEL, 0)
 
-    pulse = calculate_rescue_time_pulse(
+    return calculate_rescue_time_pulse(
         very_distracting=very_distracting_time,
         distracting=distracting_time,
         neutral=neutral_time,
         productive=productive_time,
         very_productive=very_productive_time,
     )
-
-    return pulse

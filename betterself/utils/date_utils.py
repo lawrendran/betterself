@@ -12,8 +12,9 @@ EASTERN_TZ = pytz.timezone('US/Eastern')
 
 def get_datetime_in_eastern_timezone(year, month, day, hour, minute, second=0):
     """ Don't judge me, I use this a lot for debugging my timezone thoughts """
-    eastern_datetime = datetime.datetime(year, month, day, hour, minute, second, tzinfo=EASTERN_TZ)
-    return eastern_datetime
+    return datetime.datetime(
+        year, month, day, hour, minute, second, tzinfo=EASTERN_TZ
+    )
 
 
 def get_current_utc_time_and_tz():
@@ -36,8 +37,7 @@ def days_ago_from_current_day(days):
     now = datetime.datetime.utcnow()
     # make sure the timezone is added to the datetime, otherwise many warnings
     now = UTC_TZ.localize(now)
-    date_days_ago = now - relativedelta.relativedelta(days=days)
-    return date_days_ago
+    return now - relativedelta.relativedelta(days=days)
 
 
 def get_current_date_months_ago(months):
