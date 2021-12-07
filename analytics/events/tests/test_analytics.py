@@ -45,7 +45,11 @@ class DataFrameEventsAnalyzerTests(TestCase):
 
         # create date index to make dataframe act more like real data
         start_time = datetime.datetime(2016, 1, 1)
-        dataframe_date_index = [start_time + datetime.timedelta(days=day) for day in range(0, len(caffeine_series))]
+        dataframe_date_index = [
+            start_time + datetime.timedelta(days=day)
+            for day in range(len(caffeine_series))
+        ]
+
 
         dataframe.index = dataframe_date_index
         return dataframe

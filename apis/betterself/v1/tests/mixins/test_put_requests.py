@@ -9,16 +9,8 @@ from apis.betterself.v1.urls import API_V1_LIST_CREATE_URL
 class PUTRequestsTestsMixin(GenericRESTMethodMixin):
     def _get_initial_data(self, data=None):
         url = API_V1_LIST_CREATE_URL.format(self.TEST_MODEL.RESOURCE_NAME)
-        if data:
-            request = self.client_1.get(url, data=data)
-        else:
-            request = self.client_1.get(url)
-
-        if self.PAGINATION:
-            data = request.data['results']
-        else:
-            data = request.data
-
+        request = self.client_1.get(url, data=data) if data else self.client_1.get(url)
+        data = request.data['results'] if self.PAGINATION else request.data
         return data
 
     def test_put_empty_data_returns_404(self):

@@ -38,8 +38,7 @@ class SupplementAnalyticsMixin(object):
             'productivity': productivity_series
         }
 
-        dataframe = pd.DataFrame(dataframe_details)
-        return dataframe
+        return pd.DataFrame(dataframe_details)
 
     @staticmethod
     def _get_daily_supplement_events_series_last_year(user, supplement):

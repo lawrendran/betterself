@@ -93,8 +93,7 @@ class SupplementEventsDataframeBuilder(DataFrameBuilder):
         if df.empty:
             return df
 
-        flat_df = self._get_summed_df_by_daily_index(df, timezone=self.user.pytz_timezone)
-        return flat_df
+        return self._get_summed_df_by_daily_index(df, timezone=self.user.pytz_timezone)
 
     @staticmethod
     def _get_summed_df_by_daily_index(df, timezone):
@@ -142,9 +141,8 @@ class ProductivityLogEventsDataframeBuilder(DataFrameBuilder):
         """
         Simplify the history of the model and condense it to a daily metric
         """
-        df = self.build_dataframe()
         # ProductivityLogs are already in a daily format, so no need to flatten
-        return df
+        return self.build_dataframe()
 
     def get_productive_timeseries(self):
         df = self.build_dataframe()
@@ -154,10 +152,7 @@ class ProductivityLogEventsDataframeBuilder(DataFrameBuilder):
         productive_columns = [item for item in df.keys() if 'Productive' in item]
         productive_df = df[productive_columns]
 
-        # now sum all the columns together to get a sum of collective periods
-        productive_timeseries = productive_df.sum(axis=1)
-
-        return productive_timeseries
+        return productive_df.sum(axis=1)
 
     def get_unproductive_timeseries(self):
         df = self.build_dataframe()
@@ -171,9 +166,7 @@ class ProductivityLogEventsDataframeBuilder(DataFrameBuilder):
         # exclude "source" too
         unproductive_df = df[unproductive_columns]
 
-        # now sum all the columns together to get a sum of collective periods
-        unproductive_timeseries = unproductive_df.sum(axis=1)
-        return unproductive_timeseries
+        return unproductive_df.sum(axis=1)
 
 
 class SleepActivityDataframeBuilder(object):
@@ -213,8 +206,7 @@ class SleepActivityDataframeBuilder(object):
 
             sleep_dates.append(result)
 
-        index = pd.DatetimeIndex(sleep_dates)
-        return index
+        return pd.DatetimeIndex(sleep_dates)
 
     def get_sleep_history_series(self):
         """

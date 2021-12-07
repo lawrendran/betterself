@@ -80,19 +80,11 @@ class GenericRESTMethodMixin(object):
     def _make_post_request(self, client, request_parameters):
         url = API_V1_LIST_CREATE_URL.format(self.TEST_MODEL.RESOURCE_NAME)
         data = json.dumps(request_parameters)
-        request = client.post(url, data=data, content_type='application/json')
-        return request
+        return client.post(url, data=data, content_type='application/json')
 
     def _make_get_request(self, client):
         url = API_V1_LIST_CREATE_URL.format(self.TEST_MODEL.RESOURCE_NAME)
-        request = client.get(url)
-        return request
+        return client.get(url)
 
     def _get_results_from_response(self, response):
-        # pagination puts data into results
-        if self.PAGINATION:
-            request_data = response.data['results']
-        else:
-            request_data = response.data
-
-        return request_data
+        return response.data['results'] if self.PAGINATION else response.data

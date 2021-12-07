@@ -4,11 +4,7 @@ def create_django_choice_tuple_from_list(list_a):
 
     tuples_list = []
     for item in list_a:
-        if isinstance(item, str):
-            tuple_item_title = item.title()
-        else:
-            tuple_item_title = item
-
+        tuple_item_title = item.title() if isinstance(item, str) else item
         tuple_item = (item, tuple_item_title)
         tuples_list.append(tuple_item)
 

@@ -56,7 +56,9 @@ class FitbitResponseSleepActivitySerializer(serializers.ModelSerializer):
             start_time__lte=end_time_local)
         overlaps.delete()
 
-        instance = SleepLog.objects.create(
-            user=user, end_time=end_time_local, start_time=start_time_local, source=data['source']
+        return SleepLog.objects.create(
+            user=user,
+            end_time=end_time_local,
+            start_time=start_time_local,
+            source=data['source'],
         )
-        return instance

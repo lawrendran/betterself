@@ -23,26 +23,22 @@ class AggregateDataFrameBuilder(object):
     @staticmethod
     def get_supplement_event_dataframe(queryset):
         builder = SupplementEventsDataframeBuilder(queryset)
-        supplement_event_dataframe = builder.get_flat_daily_dataframe()
-        return supplement_event_dataframe
+        return builder.get_flat_daily_dataframe()
 
     @staticmethod
     def get_productivity_log_dataframe(queryset):
         builder = ProductivityLogEventsDataframeBuilder(queryset)
-        productivity_log_dataframe = builder.build_dataframe()
-        return productivity_log_dataframe
+        return builder.build_dataframe()
 
     @staticmethod
     def get_sleep_activity_series(queryset):
         builder = SleepActivityDataframeBuilder(queryset)
-        series = builder.get_sleep_history_series()
-        return series
+        return builder.get_sleep_history_series()
 
     @staticmethod
     def get_user_activity_events_dataframe(queryset):
         builder = UserActivityEventDataframeBuilder(queryset)
-        user_activity_dataframe = builder.get_flat_daily_dataframe()
-        return user_activity_dataframe
+        return builder.get_flat_daily_dataframe()
 
     def build_daily_dataframe(self):
         # if a queryset is passed, attempt to build a dataframe from the queryset
@@ -65,15 +61,7 @@ class AggregateDataFrameBuilder(object):
             df = self.get_sleep_activity_series(self.sleep_activities_queryset)
             contact_dfs.append(df)
 
-        # axis of zero means to align them based on column we want to align it based on matching index, so axis=1
-        # this seems kind of weird though for axis of 1 to mean the index though
-        if contact_dfs:
-            concat_df = pd.concat(contact_dfs, axis=1)
-        else:
-            # concat doesn't work with an empty list, in the case of no data, return empty dataframe
-            concat_df = pd.DataFrame()
-
-        return concat_df
+        return pd.concat(contact_dfs, axis=1) if contact_dfs else pd.DataFrame()
 
 
 class AggregateSleepActivitiesUserActivitiesBuilder(AggregateDataFrameBuilder):
@@ -99,8 +87,7 @@ class AggregateSleepActivitiesUserActivitiesBuilder(AggregateDataFrameBuilder):
             sleep_activities_queryset=sleep_logs
         )
 
-        dataframe = aggregate_dataframe.build_daily_dataframe()
-        return dataframe
+        return aggregate_dataframe.build_daily_dataframe()
 
 
 class AggregateSleepActivitiesSupplementsBuilder(AggregateDataFrameBuilder):
@@ -126,8 +113,7 @@ class AggregateSleepActivitiesSupplementsBuilder(AggregateDataFrameBuilder):
             supplement_event_queryset=supplement_events
         )
 
-        dataframe = aggregate_dataframe.build_daily_dataframe()
-        return dataframe
+        return aggregate_dataframe.build_daily_dataframe()
 
 
 class AggregateUserActivitiesEventsProductivityActivitiesBuilder(AggregateDataFrameBuilder):
@@ -153,8 +139,7 @@ class AggregateUserActivitiesEventsProductivityActivitiesBuilder(AggregateDataFr
             productivity_log_queryset=productivity_logs,
         )
 
-        dataframe = aggregate_dataframe.build_daily_dataframe()
-        return dataframe
+        return aggregate_dataframe.build_daily_dataframe()
 
 
 class AggregateSupplementProductivityDataframeBuilder(AggregateDataFrameBuilder):
@@ -179,5 +164,4 @@ class AggregateSupplementProductivityDataframeBuilder(AggregateDataFrameBuilder)
             supplement_event_queryset=supplement_events,
             productivity_log_queryset=productivity_logs,
         )
-        dataframe = aggregate_dataframe.build_daily_dataframe()
-        return dataframe
+        return aggregate_dataframe.build_daily_dataframe()

@@ -11,6 +11,7 @@ Production Configurations
 - Use opbeat for error reporting
 
 """
+
 from config.settings.constants import PRODUCTION
 
 print ('Using {} configurations'.format(__name__))
@@ -121,7 +122,7 @@ AWS_QUERYSTRING_AUTH = False
 AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
 
 # AWS cache settings, don't change unless you know what you're doing:
-AWS_EXPIRY = 60 * 60 * 24 * 7
+AWS_EXPIRY = 60**2 * 24 * 7
 
 # TODO See: https://github.com/jschneier/django-storages/issues/47
 # Revert the following and use str after the above-mentioned bug is fixed in

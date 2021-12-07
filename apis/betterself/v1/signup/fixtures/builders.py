@@ -19,7 +19,7 @@ class DemoHistoricalDataBuilder(object):
 
     def __init__(self, user, periods_back=30):
         self.user = user
-        self.hour_series = range(0, 24)
+        self.hour_series = range(24)
 
         historical_data_points_quantity = periods_back
 
@@ -51,16 +51,14 @@ class DemoHistoricalDataBuilder(object):
         if not peak_threshold_quantity:
             return net_productivity_impact_per_quantity * quantity
 
-        if quantity > peak_threshold_quantity:
-            negative_quantity = quantity - peak_threshold_quantity
-            negative_quantity_minutes = post_threshold_impact_on_productivity_per_quantity * negative_quantity
+        if quantity <= peak_threshold_quantity:
+            return quantity * net_productivity_impact_per_quantity
 
-            positive_quantity_minutes = peak_threshold_quantity * net_productivity_impact_per_quantity
-            net_productivity_minutes = negative_quantity_minutes + positive_quantity_minutes
-        else:
-            net_productivity_minutes = quantity * net_productivity_impact_per_quantity
+        negative_quantity = quantity - peak_threshold_quantity
+        negative_quantity_minutes = post_threshold_impact_on_productivity_per_quantity * negative_quantity
 
-        return net_productivity_minutes
+        positive_quantity_minutes = peak_threshold_quantity * net_productivity_impact_per_quantity
+        return negative_quantity_minutes + positive_quantity_minutes
 
     @staticmethod
     def calculate_sleep_impact(quantity, event_details):
@@ -74,8 +72,7 @@ class DemoHistoricalDataBuilder(object):
         """
         data_points_to_create = len(index)
         sleep_times = np.random.normal(loc=mean, scale=std_dev, size=data_points_to_create)
-        sleep_series = pd.Series(sleep_times, index=index)
-        return sleep_series
+        return pd.Series(sleep_times, index=index)
 
     def create_sleep_fixtures(self):
         # Include the baseline randomness of sleep along with how supplements impacted it

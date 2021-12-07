@@ -63,8 +63,7 @@ class DataFrameEventsAnalyzer(object):
     @staticmethod
     def _get_correlation_from_dataframe(dataframe, measurement, method, min_periods):
         correlation_results = dataframe.corr(method, min_periods)[measurement]
-        correlation_results_sorted = correlation_results.sort_values(inplace=False)
-        return correlation_results_sorted
+        return correlation_results.sort_values(inplace=False)
 
     def get_correlation_for_measurement(self, measurement, add_yesterday_lag=False, method='pearson', min_periods=1):
         """
@@ -75,8 +74,9 @@ class DataFrameEventsAnalyzer(object):
         :return: correlation series
         """
         dataframe = self._get_cleaned_dataframe_copy(measurement, add_yesterday_lag=add_yesterday_lag, method=method)
-        correlation_results_sorted = self._get_correlation_from_dataframe(dataframe, measurement, method, min_periods)
-        return correlation_results_sorted
+        return self._get_correlation_from_dataframe(
+            dataframe, measurement, method, min_periods
+        )
 
     def get_correlation_across_summed_days_for_measurement(self, measurement, add_yesterday_lag=False, window=7,
             method='pearson', min_periods=1):
@@ -93,30 +93,27 @@ class DataFrameEventsAnalyzer(object):
         # for anything that isn't filled in, assume those are zeros, kind of have to because we're summing
         dataframe = dataframe.fillna(0)
 
-        correlation_results_sorted = self._get_correlation_from_dataframe(dataframe, measurement, method, min_periods)
-        return correlation_results_sorted
+        return self._get_correlation_from_dataframe(
+            dataframe, measurement, method, min_periods
+        )
 
     @staticmethod
     def get_rollable_columns(dataframe):
         # not all dataframe columns are rollable ... the original source (excel) should already have them
         # listed as minutes, so don't try to sum up Time objects
         dataframe_col_types = dataframe.dtypes
-        dataframe_rollable_columns = [col_name for col_name, col_type in dataframe_col_types.items() if col_type in
-            ROLLABLE_COLUMN_TYPES]
-        return dataframe_rollable_columns
+        return [
+            col_name
+            for col_name, col_type in dataframe_col_types.items()
+            if col_type in ROLLABLE_COLUMN_TYPES
+        ]
 
     @classmethod
     def get_rolled_dataframe(cls, dataframe, window, min_periods=None):
         dataframe_rollable_columns = cls.get_rollable_columns(dataframe)
 
         rollable_dataframe = dataframe[dataframe_rollable_columns]
-        # haven't figured out the right way to deal with min_periods
-        # the thinking is that this rolling function should not be as forgiving
-        # instead, maybe have the serializer replace NaN data with zeroes at that step
-        # since "unfilled data" frequently just means None
-        rolled_dataframe = rollable_dataframe.rolling(window=window, center=False).sum()
-
-        return rolled_dataframe
+        return rollable_dataframe.rolling(window=window, center=False).sum()
 
     @staticmethod
     def _remove_invalid_measurement_days(dataframe, measurement):
